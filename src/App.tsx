@@ -1,35 +1,20 @@
 import "./App.css";
+import Home from "./pages/Home";
+
 import "./reset.css";
 
 function App() {
-  const fillForm = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0];
-
-      function printTitle() {
-        const title = document.title;
-        console.log(title);
-      }
-
-      chrome.scripting
-        .executeScript({
-          target: { tabId: tab.id ?? 0 },
-          func: printTitle,
-          //        files: ['contentScript.js'],  // To call external file instead
-        })
-        .then(() => console.log("Injected a function!"));
-    });
-  };
-
   return (
     <>
-      <div className="flex flex-row items-center justify-center w-full h-full bg-green-700">
-        <button
-          className="bg-yellow-400 text-white rounded-lg px-4 py-2"
-          onClick={() => fillForm()}
-        >
-          Fill
-        </button>
+      <div className="flex flex-row items-center justify-center p-2 w-[300px] h-[400px] bg-[#0b2938]">
+        <div className="flex flex-col gap-4 justify-between items-center bg-white rounded-xl w-full h-full">
+          <Home />
+          <footer className="p-2.5 w-full h-[50px]">
+            <div className="flex flex-row h-full w-full items-center text-xs text-[#0b2938] border-t border-solid  border-[#0b2938]">
+              Your current Plan
+            </div>
+          </footer>
+        </div>
       </div>
     </>
   );
