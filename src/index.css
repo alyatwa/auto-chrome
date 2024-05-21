@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 html {
-  width: 300px; /* max: 800px */
-  height: 400px; /* max: 600px */
+  width: 300px;
+  height: 400px;
 }
 
 :root {

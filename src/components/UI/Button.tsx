@@ -42,7 +42,11 @@ const Button = forwardRef<Ref, ButtonProps>((props, ref) => {
     ...rest
   } = props;
 
-  const merged = clsx("btn focus:outline-none", getVariant(variant), className);
+  const merged = clsx(
+    "btn focus:outline-none border-none disabled:opacity-80",
+    getVariant(variant),
+    className
+  );
 
   return (
     <button type={type} ref={ref} className={merged} {...rest}>
