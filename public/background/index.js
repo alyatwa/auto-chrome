@@ -22,6 +22,10 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
     });
   }
 
+  if (message.command === "InitApp") {
+    sendResponse(init());
+  }
+
   if (message.command === "GetUserToken") {
     chrome.storage.local.get(["token"]).then((result) => {
       sendResponse(result);
@@ -42,6 +46,8 @@ async function SetUserToken(token: string) {
 }
 
 const init = () => {
+  let isAuth = false;
+  let user = {};
   chrome.cookies.get({ url: HOST, name: COOKIE_NAME }, function (theCookie) {
     if (theCookie) {
       chrome.storage.local.get([USER_DATA_NAME], function (result) {
@@ -53,16 +59,27 @@ const init = () => {
           })
             .then((response) => response.json())
             .then(async (data) => {
+              isAuth = true;
+              user = data;
               // Save the user data in local storage
-              await chrome.storage.local.set({ userData: data }, function () {
-                console.log("User data saved in local storage");
-              });
+              await chrome.storage.local.set(
+                { [USER_DATA_NAME]: data },
+                function () {
+                  console.log("User data saved in local storage");
+                }
+              );
             })
             .catch((error) => console.error("Error:", error));
+        } else {
+          isAuth = true;
+          user = result[USER_DATA_NAME];
         }
       });
     } else {
       console.log("User should login first...");
+      user = null;
+      isAuth = false;
     }
   });
+  return { isAuth, user };
 };
