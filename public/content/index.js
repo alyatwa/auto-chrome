@@ -71,7 +71,6 @@ const getInputsInPage = () => {
 };
 
 const generateValues = (inputs, token) => {
-  console.log(inputs, token);
   let values = [];
   apiRequest(
     "autofill",
@@ -118,7 +117,7 @@ const sendConfirmation = () => {
       data: { success: true, msg: "Autofill completed successfully!" },
     },
     function (response) {
-      console.log(response);
+      // console.log(response);
     }
   );
 };

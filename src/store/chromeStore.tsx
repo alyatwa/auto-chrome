@@ -7,8 +7,9 @@ import {
 } from "react";
 import { Message, sendMessage } from "./sendMessage";
 import { useToast } from "../components/Toast/ToastService";
+// @ts-ignore
+import useSound from "use-sound";
 
-// Message and response are define in https://gist.github.com/EduardoAC/000b1e39a6ec10a892e7c6cd93730a53
 interface GlobalContext {
   auth: boolean;
   loading: boolean;
@@ -37,6 +38,7 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const toast = useToast();
+  const [playOn] = useSound("./noti.mp3", { volume: 0.9 });
 
   const handleMessageListener = (message: Message<number | string>) => {
     setLoading(false);
@@ -45,6 +47,7 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
         console.log("________autofill-status_________");
         if (message.data.success) {
           toast.open("Form filled successfully", 2000);
+          playOn();
         }
         // Handle review, reviewHandler(message, setReview) | review = reviewHandler(message) -> state in the handler
         break;

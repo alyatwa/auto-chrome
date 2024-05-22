@@ -19,7 +19,12 @@
     "16": "images/logo.jpg",
     "32": "images/logo.jpg"
   },
-
+  "web_accessible_resources": [
+    {
+      "resources": ["noti.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "background": {
     "service_worker": "background/index.js"
   },

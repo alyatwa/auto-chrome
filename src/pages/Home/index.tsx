@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../../components/UI/Button";
 import { useGlobalContext } from "../../store/chromeStore";
 import { useToast } from "../../components/Toast/ToastService";
