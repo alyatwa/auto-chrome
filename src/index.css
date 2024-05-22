@@ -7,6 +7,16 @@ html {
   height: 400px;
 }
 
+.circle-gradient::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: radial-gradient(closest-side, #8cf8ff, transparent);
+  opacity: 1;
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
