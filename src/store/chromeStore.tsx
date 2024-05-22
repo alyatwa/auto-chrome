@@ -12,6 +12,8 @@ import useSound from "use-sound";
 
 interface GlobalContext {
   auth: boolean;
+  page: "login" | "settings" | "form" | "home";
+  setPage: (page: "login" | "settings" | "form" | "home") => void;
   loading: boolean;
   token: string | null;
   user: User | null;
@@ -21,6 +23,8 @@ interface GlobalContext {
 
 const globalContext = createContext<GlobalContext>({
   auth: false,
+  page: "login",
+  setPage: (page: "login" | "settings" | "form" | "home") => {},
   loading: false,
   setLoading: () => {},
   token: null,
@@ -35,6 +39,9 @@ interface GlobalContextProvider {
 export function GlobalContextProvider({ children }: GlobalContextProvider) {
   const [auth, setAuth] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<"login" | "settings" | "form" | "home">(
+    "login"
+  );
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const toast = useToast();
@@ -55,9 +62,11 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
         // For simplicity, assume only message language received by content script is the new language selection
         if (message.data.isAuth) {
           setAuth(true);
+          setPage("home");
           setUser(message.data.user);
           setToken(message.data.token);
         } else {
+          setPage("login");
           setToken(null);
           setAuth(false);
           setUser(null);
@@ -78,6 +87,10 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
 
   const contextValue = {
     auth,
+    page,
+    setPage: (page: "login" | "settings" | "form" | "home") => {
+      setPage(page);
+    },
     token,
     user,
     loading,

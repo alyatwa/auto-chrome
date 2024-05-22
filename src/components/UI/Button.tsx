@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { forwardRef } from "react";
 
-type ButtonVariant = "outline" | "solid" | "ghost";
+type ButtonVariant = "outline" | "solid" | "ghost" | "rounded";
 
 interface ButtonOptions {
   /**
@@ -24,6 +24,8 @@ const getVariant = (variant: ButtonVariant) => {
   switch (variant) {
     case "solid":
       return " bg-[#eafe63] text-[#0b2938] text-sm rounded-full px-6 py-2 flex-shrink-0";
+    case "rounded":
+      return "flex justify-center hover:none bg-[#eafe62] w-[40px] h-[40px] rounded-full bg-no-repeat bg-center bg-[length:22px_22px]";
     case "outline":
       return " bg-[#eafe63] text-[#0b2938] text-sm rounded-full px-6 py-2 flex-shrink-0";
     case "ghost":
