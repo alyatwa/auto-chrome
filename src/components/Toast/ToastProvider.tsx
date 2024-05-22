@@ -25,7 +25,7 @@ export default function ToastProvider({
     <ToastContext.Provider value={{ open, close }}>
       {children}
       {toasts.length > 0 && (
-        <div className="animate-slide space-y-2 w-full flex justify-center absolute bottom-4 z-50 ">
+        <div className="animate-slide space-y-2 w-full flex justify-center absolute bottom-4 z-[999] ">
           {toasts.map(({ id, component }) => (
             <div
               key={id}

@@ -13,7 +13,6 @@ export function sendMessage<T, V>(message: Message<T>) {
   return new Promise<any>((resolve, reject) => {
     try {
       chrome.runtime.sendMessage(message, (response: Response<V>) => {
-        console.log("received user data", response);
         if (!chrome.runtime.lastError) {
           resolve(response);
         } else {
@@ -26,5 +25,3 @@ export function sendMessage<T, V>(message: Message<T>) {
     }
   });
 }
-// Example using numbers
-//const responseDataNumber = await sendMessage<number, number>({ type: "hello", subtype: "world", data: 1})

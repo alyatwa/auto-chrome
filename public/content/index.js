@@ -104,6 +104,7 @@ const injectValues = (values) => {
 
     // If the input exists, set its value to the value associated with the current key
     if (input) {
+      input.focus();
       input.value = key.Input_value;
     }
   }
