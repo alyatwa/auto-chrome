@@ -6,15 +6,30 @@
   "action": {
     "default_popup": "index.html"
   },
-  "permissions": ["scripting", "tabs", "activeTab", "cookies", "storage"],
+  "permissions": [
+    "scripting",
+    "tabs",
+    "activeTab",
+    "cookies",
+    "storage",
+    "nativeMessaging"
+  ],
 
   "icons": {
     "16": "images/logo.jpg",
     "32": "images/logo.jpg"
   },
+
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background/index.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/index.js"],
+      "all_frames": false
+    }
+  ],
   "host_permissions": ["<all_urls>"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';",

@@ -1,43 +1,58 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-const HOST = "http://localhost:8000/";
-const COOKIE_NAME = "token";
+const HOST = "http://localhost";
+const HOST_url = "http://localhost:8000";
+const COOKIE_NAME = "chromeToken";
 const USER_DATA_NAME = "userData";
 
 chrome.runtime.onStartup.addListener(function () {
   console.log("Extension has been started");
-  init();
+  //init();
 });
 
 chrome.runtime.onInstalled.addListener(function () {
   console.log("Extension has been installed...");
-  init();
+  // init();
 });
-chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.command === "GetCookies") {
-    chrome.cookies.get({ url: HOST, name: COOKIE_NAME }, function (theCookies) {
-      console.log(theCookies);
-      sendResponse(theCookies);
-    });
+    (async () => {
+      const cookie = await chrome.cookies.get({ url: HOST, name: COOKIE_NAME });
+      console.log(">>>>> ", cookie?.value);
+      sendResponse({
+        command: "sendAutofillTokenInputs",
+        inputs: message.inputs,
+        url: message.url,
+        token: cookie?.value ?? "-",
+      });
+    })();
+    return true;
   }
 
   if (message.command === "InitApp") {
-    sendResponse(init());
+    //init();
   }
 
-  if (message.command === "GetUserToken") {
-    chrome.storage.local.get(["token"]).then((result) => {
-      sendResponse(result);
-    });
+  if (true) {
+    // Sender Tab useful mostly for background script
+    switch (message.type) {
+      case "get-user":
+        // Tab is useful for instance to obtain the url to fetch the review from
+        userHandler(sender.tab, message, sendResponse);
+        break;
 
-    if (message.command === "SetUserToken") {
-      SetUserToken(message.token);
+      default:
+        sendResponse("Error: Not found message type");
+        break;
     }
+    return true; // This is really important, tells the extension whether is an ASYNCHRONOUS sendResponse or not
   }
+  return false; // False means synchronous response
 });
 
-async function SetUserToken(token: string) {
+async function SetUserToken(token) {
   try {
     await chrome.storage.local.set({ token });
   } catch (error) {
@@ -45,41 +60,79 @@ async function SetUserToken(token: string) {
   }
 }
 
-const init = () => {
+const userHandler = (tab, message, sendResponse) => {
   let isAuth = false;
   let user = {};
   chrome.cookies.get({ url: HOST, name: COOKIE_NAME }, function (theCookie) {
     if (theCookie) {
+      let token = "Bearer " + theCookie.value;
       chrome.storage.local.get([USER_DATA_NAME], function (result) {
         if (!result[USER_DATA_NAME]) {
-          fetch(HOST + "api/user", {
+          fetch(HOST_url + "/api/autofill/chrome-user", {
+            method: "GET",
             headers: {
-              Authorization: "Bearer " + theCookie.value,
+              Authorization: token,
             },
           })
             .then((response) => response.json())
-            .then(async (data) => {
+            .then(async (res) => {
               isAuth = true;
-              user = data;
-              // Save the user data in local storage
+              let user_data = res.data;
+              user = user_data;
               await chrome.storage.local.set(
-                { [USER_DATA_NAME]: data },
+                { [USER_DATA_NAME]: user_data },
                 function () {
-                  console.log("User data saved in local storage");
+                  sendResponse({
+                    type: "get-user",
+                    data: {
+                      token,
+                      isAuth: true,
+                      user: result[USER_DATA_NAME],
+                    },
+                  });
                 }
               );
             })
             .catch((error) => console.error("Error:", error));
         } else {
-          isAuth = true;
-          user = result[USER_DATA_NAME];
+          sendResponse({
+            type: "get-user",
+            data: {
+              token,
+              isAuth: true,
+              user: result[USER_DATA_NAME],
+            },
+          });
         }
       });
     } else {
-      console.log("User should login first...");
-      user = null;
-      isAuth = false;
+      sendResponse({
+        type: "get-user",
+        data: {
+          token: null,
+          isAuth: false,
+          user: {},
+        },
+      });
     }
   });
-  return { isAuth, user };
+};
+
+const sendMsg = (data) => {
+  (async () => {
+    try {
+      await chrome.runtime.sendMessage({
+        command: "get-user",
+        data,
+      });
+    } catch (error) {}
+  })();
+};
+
+const sendAutofillTokenInputs = (data) => {
+  (async () => {
+    try {
+      await chrome.runtime.sendMessage(data);
+    } catch (error) {}
+  })();
 };

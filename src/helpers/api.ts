@@ -1,3 +1,5 @@
+import { constants } from "../utils/constants";
+
 export default async function apiRequest(
   url: string,
   method = "GET",
@@ -5,10 +7,11 @@ export default async function apiRequest(
   headers = {}
 ) {
   // Default options are marked with *
-  const response = await fetch("https://localhost:8000/api/" + url, {
+  const response = await fetch(constants.base_api_url + url, {
     method: method,
     headers: {
       "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
       ...headers,
     },
     body: body ? JSON.stringify(body) : null, // body data type must match "Content-Type" header
