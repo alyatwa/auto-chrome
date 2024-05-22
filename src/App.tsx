@@ -19,7 +19,17 @@ function App() {
           {auth ? (
             <>
               <p className="">User: {user?.name}</p>
-              <p className="">Current Plan: {user?.plan.name}</p>
+              {user?.plan.name == "basic" ? (
+                <p className="">Current Plan: {user?.plan.name}</p>
+              ) : (
+                <a
+                  href={constants.base_url}
+                  target="_blank"
+                  className=" text-[#0b2938]"
+                >
+                  Upgrade
+                </a>
+              )}{" "}
             </>
           ) : (
             <div className="inline-flex gap-4  ">
