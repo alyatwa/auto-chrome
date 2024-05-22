@@ -19,7 +19,7 @@ function App() {
           {auth ? (
             <>
               <p className="">User: {user?.name}</p>
-              {user?.plan.name == "basic" ? (
+              {user?.plan.name == "pro" ? (
                 <p className="">Current Plan: {user?.plan.name}</p>
               ) : (
                 <a
