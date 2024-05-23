@@ -7,10 +7,10 @@ import { GlobalContextProvider } from "./store/chromeStore.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <GlobalContextProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <GlobalContextProvider>
         <App />
-      </ToastProvider>
-    </GlobalContextProvider>
+      </GlobalContextProvider>
+    </ToastProvider>
   </React.StrictMode>
 );

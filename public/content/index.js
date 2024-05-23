@@ -2,6 +2,7 @@ const base_api_url = "http://localhost:8000/api/";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "startAutofill") {
+    console.log("startAutofill", request.url);
     start(request.token, request.url);
   }
 });
@@ -25,9 +26,9 @@ const apiRequest = async (url, method = "GET", body = null, headers = {}) => {
   return response.json(); // parses JSON response into native JavaScript objects
 };
 
-const start = (token) => {
+const start = (token, url) => {
   const inputs = getInputsInPage();
-  const values = generateValues(inputs, token, url);
+  generateValues(inputs, token, url);
 };
 
 const getInputsInPage = () => {

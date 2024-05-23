@@ -26,7 +26,7 @@ export const useApps = () => {
       name: "writeEmail",
       label: "Write Email",
       img: "/images/email.png",
-      disabled: false,
+      disabled: true,
       isPaid: false,
       handleClick: () => {},
     },

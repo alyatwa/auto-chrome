@@ -23,7 +23,7 @@ const Settings: React.FC = () => {
         </p>
       </div>
 
-      <Button onClick={() => setPage("login")}>Refresh</Button>
+      <Button onClick={() => setPage("home")}>Refresh</Button>
     </div>
   );
 };

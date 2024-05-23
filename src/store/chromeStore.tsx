@@ -51,9 +51,9 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
     setLoading(false);
     switch (message.type) {
       case "autofill-status":
-        console.log("________autofill-status_________");
         if (message.data.success) {
           toast.open("Form filled successfully", 2000);
+          console.log("_____autofill-status__ success_______");
           playOn();
         }
         // Handle review, reviewHandler(message, setReview) | review = reviewHandler(message) -> state in the handler
