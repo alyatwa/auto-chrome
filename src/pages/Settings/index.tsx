@@ -4,7 +4,7 @@ import { useGlobalContext } from "../../store/chromeStore";
 import Button from "../../components/UI/Button";
 
 const Settings: React.FC = () => {
-  const { user, setPage } = useGlobalContext();
+  const { user, refreshUser, loading } = useGlobalContext();
 
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full h-full">
@@ -23,7 +23,9 @@ const Settings: React.FC = () => {
         </p>
       </div>
 
-      <Button onClick={() => setPage("home")}>Refresh</Button>
+      <Button disabled={loading} onClick={() => refreshUser()}>
+        Refresh
+      </Button>
     </div>
   );
 };

@@ -1,14 +1,22 @@
-const base_api_url = "http://localhost:8000/api/";
+const base_api_url = "http://localhost:8000/api/autofill";
+const open_ai_api = "https://chat.openai.com/backend-api/conversation";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.message === "startAutofill") {
-    console.log("startAutofill", request.url);
-    start(request.token, request.url);
+  switch (request.message) {
+    case "startAutofill":
+      start(request.token, request.url);
+      break;
+    case "summarize-now-cs":
+      injectResponse(request.data, sendResponse);
+      break;
+    default:
+      sendResponse({ data: "Error: Not found message type" });
+      break;
   }
 });
 
 const apiRequest = async (url, method = "GET", body = null, headers = {}) => {
-  const response = await fetch(base_api_url + url, {
+  const response = await fetch(url, {
     method: method,
     headers: {
       "Content-Type": "application/json",
@@ -74,7 +82,7 @@ const getInputsInPage = () => {
 const generateValues = (inputs, token, url) => {
   let values = [];
   apiRequest(
-    "autofill",
+    base_api_url,
     "POST",
     {
       url,
@@ -121,4 +129,70 @@ const sendConfirmation = () => {
       // console.log(response);
     }
   );
+};
+
+const injectResponse = (data, sendResponse) => {
+  console.log(data.response.data);
+  var modal = document.createElement("div");
+  modal.id = "AI-modal";
+  modal.style.position = "fixed";
+  modal.style.top = "0";
+  modal.style.left = "0";
+  modal.style.width = "100%";
+  modal.style.height = "100%";
+  modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+  modal.style.zIndex = "500";
+  document.body.appendChild(modal);
+
+  var div = document.createElement("div");
+  div.id = "AI-container";
+  div.style.position = "fixed";
+  div.className = "autofill-extension";
+  div.style.top = "50%";
+  div.style.left = "50%";
+  div.style.padding = "20px";
+  div.style.borderRadius = "23px";
+  div.style.width = "500px";
+  div.style.height = "500px";
+  div.style.backgroundColor = "white";
+  div.style.zIndex = "1000";
+  div.style.overflowY = "auto";
+  div.style.transform = "translate(-50%, -50%)";
+  //div.textContent = JSON.stringify(data.response.data);
+  modal.appendChild(div);
+
+  const container = document.getElementById("AI-container");
+  /** close */
+  var close = document.createElement("span");
+  close.textContent = "Close";
+  close.style.fontSize = "16px";
+  close.style.marginBottom = "10px";
+  close.style.position = "absolute";
+  close.style.top = "10px";
+  close.style.right = "10px";
+  close.style.cursor = "pointer";
+  close.style.color = "red";
+  close.addEventListener("click", () => {
+    modal.remove();
+  });
+  container.appendChild(close);
+
+  const box = document.createElement("div");
+  box.style.marginTop = "20px";
+  box.style.display = "flex";
+  box.style.flexDirection = "column";
+  box.style.gap = "2px";
+  container.appendChild(box);
+
+  let resTxt = "";
+  data.response.data.forEach((v) => {
+    resTxt += `<p style="margin-bottom:8px;">${v}</p>`;
+  });
+  box.innerHTML = resTxt;
+  /* Object.entries(data.response.data).forEach(([key, value]) => {
+    const div = document.createElement("div");
+    div.textContent = `${key}: ${value}`;
+    container.appendChild(div);
+  }); */
+  sendResponse("injected content");
 };

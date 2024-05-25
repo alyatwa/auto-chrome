@@ -11,6 +11,7 @@
     "tabs",
     "activeTab",
     "cookies",
+    "webRequest",
     "storage",
     "nativeMessaging"
   ],
@@ -30,6 +31,7 @@
   },
   "content_scripts": [
     {
+      "run_at": "document_start",
       "matches": ["<all_urls>"],
       "js": ["content/index.js"],
       "all_frames": false

@@ -16,9 +16,13 @@ interface GlobalContext {
   setPage: (page: "login" | "settings" | "form" | "home") => void;
   loading: boolean;
   token: string | null;
+  openAIToken: string | null;
+  getOpenAIToken: () => void;
   user: User | null;
+  refreshUser: () => void;
   getUser: Function;
   setLoading: Function;
+  summarizeNow: Function;
 }
 
 const globalContext = createContext<GlobalContext>({
@@ -27,8 +31,12 @@ const globalContext = createContext<GlobalContext>({
   setPage: (page: "login" | "settings" | "form" | "home") => {},
   loading: false,
   setLoading: () => {},
+  summarizeNow: (data: any) => {},
   token: null,
+  openAIToken: null,
+  getOpenAIToken: () => {},
   user: null,
+  refreshUser: () => {},
   getUser: () => {},
 });
 
@@ -44,36 +52,58 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
   );
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [openAIToken, setOpenAIToken] = useState<string | null>(null);
   const toast = useToast();
   const [playOn] = useSound("./noti.mp3", { volume: 0.9 });
 
   const handleMessageListener = (message: Message<number | string>) => {
     setLoading(false);
     switch (message.type) {
+      case "summarize-now":
+        if (message.data.success) {
+          toast.open("Summarize completed successfully!", 2000);
+        } else {
+          toast.open(`Summarize failed!`, 2000);
+        }
+        break;
+      case "refresh-user":
+        if (message.data.success) {
+          setUser(message.data.user);
+          setToken(message.data.token);
+          toast.open("Data refresh success", 2000);
+        }
+        break;
       case "autofill-status":
         if (message.data.success) {
           toast.open("Form filled successfully", 2000);
           console.log("_____autofill-status__ success_______");
           playOn();
         }
-        // Handle review, reviewHandler(message, setReview) | review = reviewHandler(message) -> state in the handler
         break;
       case "get-user":
-        // For simplicity, assume only message language received by content script is the new language selection
         if (message.data.isAuth) {
           setAuth(true);
           setPage("home");
           setUser(message.data.user);
           setToken(message.data.token);
         } else {
+          toast.open("Login required", 2000);
           setPage("login");
           setToken(null);
           setAuth(false);
           setUser(null);
         }
         break;
+      case "authOpenAI":
+        if (message.data.success) {
+          setOpenAIToken(message.data.token);
+        } else {
+          toast.open(`OpenAI login failed ${message.data.error}`, 2000);
+        }
+        break;
       default:
-        console.error("incorrect message"); // Up to you how you handle the error case
+        toast.open(message.data);
+        console.error("incorrect message");
         break;
     }
   };
@@ -92,12 +122,36 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
       setPage(page);
     },
     token,
+    openAIToken,
     user,
     loading,
     setLoading,
+    refreshUser: async () => {
+      setLoading(true);
+      const data = await sendMessage({
+        type: "refresh-user",
+        subtype: "refresh",
+        data: {},
+      });
+      handleMessageListener(data);
+    },
     getUser: async () => {
       const data = await sendMessage({
         type: "get-user",
+        subtype: "get",
+        data: {},
+      });
+
+      handleMessageListener(data);
+    },
+    summarizeNow: async (dataP: any) => {
+      setLoading(true);
+      const data = await sendMessage(dataP);
+      handleMessageListener(data);
+    },
+    getOpenAIToken: async () => {
+      const data = await sendMessage({
+        type: "authOpenAI",
         subtype: "get",
         data: {},
       });

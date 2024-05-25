@@ -1,9 +1,9 @@
-import { useToast } from "../components/Toast/ToastService";
 import { useGlobalContext } from "../store/chromeStore";
+import useSummarize from "./useSummarize";
 
 export const useApps = () => {
   const { setPage } = useGlobalContext();
-  const toast = useToast();
+  const { summarize } = useSummarize();
 
   const apps = [
     {
@@ -12,7 +12,7 @@ export const useApps = () => {
       img: "/images/summary.png",
       disabled: false,
       isPaid: false,
-      handleClick: () => toast.open("Summarize Clicked", 3000),
+      handleClick: () => summarize(),
     },
     {
       name: "fillForm",
