@@ -1,5 +1,4 @@
 import { useGlobalContext } from "../../store/chromeStore";
-import { constants } from "../../utils/constants";
 import Button from "../UI/Button";
 
 const Header = () => {
@@ -18,9 +17,9 @@ const Header = () => {
           />
         )}
         <Button
-          onClick={() => window.open(constants.base_url, "_blank")}
+          onClick={() => setPage("settings")}
           variant="rounded"
-          style={{ backgroundImage: "url('/images/user.png')" }}
+          style={{ backgroundImage: "url('/images/setting.png')" }}
           className=" inline-flex justify-center items-center"
         />
       </div>

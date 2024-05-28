@@ -1,19 +1,19 @@
 import { useToast } from "../components/Toast/ToastService";
 import { useGlobalContext } from "../store/chromeStore";
 
-const useSummarize = () => {
-  const { token, summarizeNow, setLoading } = useGlobalContext();
+const useReview = () => {
+  const { token, reviewNow, setLoading } = useGlobalContext();
   const toast = useToast();
 
-  const summarize = () => {
+  const review = () => {
     if (token) {
       setLoading(true);
-      toast.open("Summarizing started", 1500);
+      toast.open("Review started", 1500);
       chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var activeTab = tabs[0];
-        summarizeNow({
+        reviewNow({
           tabId: activeTab.id,
-          type: "summarize-now-bg",
+          type: "review-now-bg",
           url: activeTab.url,
           title: activeTab.title,
           token,
@@ -24,8 +24,8 @@ const useSummarize = () => {
     }
   };
   return {
-    summarize,
+    review,
   };
 };
 
-export default useSummarize;
+export default useReview;

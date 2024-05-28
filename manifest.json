@@ -31,9 +31,8 @@
   },
   "content_scripts": [
     {
-      "run_at": "document_start",
+      "js": ["content-script/src/main.tsx"],
       "matches": ["<all_urls>"],
-      "js": ["content/index.js"],
       "all_frames": false
     }
   ],

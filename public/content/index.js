@@ -1,5 +1,4 @@
 const base_api_url = "http://localhost:8000/api/autofill";
-const open_ai_api = "https://chat.openai.com/backend-api/conversation";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.message) {
@@ -144,12 +143,15 @@ const injectResponse = (data, sendResponse) => {
   modal.style.zIndex = "500";
   document.body.appendChild(modal);
 
+  /** text content */
   var div = document.createElement("div");
   div.id = "AI-container";
   div.style.position = "fixed";
   div.className = "autofill-extension";
   div.style.top = "50%";
   div.style.left = "50%";
+  div.style.border = "1px solid #181818";
+  div.style.boxShadow = "0 0 10px 0 #00000070";
   div.style.padding = "20px";
   div.style.borderRadius = "23px";
   div.style.width = "500px";
@@ -177,6 +179,15 @@ const injectResponse = (data, sendResponse) => {
   });
   container.appendChild(close);
 
+  var title = document.createElement("div");
+  title.id = "micro-ai";
+  title.textContent = "Micro AI Tools";
+  title.style.fontSize = "19px";
+  title.style.color = "#181818";
+  title.style.fontWeight = "bold";
+  title.style.marginBottom = "20px";
+  container.appendChild(title);
+
   const box = document.createElement("div");
   box.style.marginTop = "20px";
   box.style.display = "flex";
@@ -184,11 +195,7 @@ const injectResponse = (data, sendResponse) => {
   box.style.gap = "2px";
   container.appendChild(box);
 
-  let resTxt = "";
-  data.response.data.forEach((v) => {
-    resTxt += `<p style="margin-bottom:8px;">${v}</p>`;
-  });
-  box.innerHTML = resTxt;
+  box.innerHTML = `<p style="margin-bottom:8px;">${data.response.data}</p>`;
   /* Object.entries(data.response.data).forEach(([key, value]) => {
     const div = document.createElement("div");
     div.textContent = `${key}: ${value}`;

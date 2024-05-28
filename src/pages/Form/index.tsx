@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "../../components/UI/Button";
 import { useGlobalContext } from "../../store/chromeStore";
 import { useToast } from "../../components/Toast/ToastService";
 import { constants } from "../../utils/constants";
 
 const Form: React.FC = () => {
-  const { token, loading, setLoading, setPage } = useGlobalContext();
+  const { token, loading, setLoading } = useGlobalContext();
   const toast = useToast();
 
   const handleFillBtn = () => {

@@ -5,8 +5,13 @@ interface Input {
   type: string;
   label: string | null | undefined;
 }
+interface InputsHtml {
+  id: string;
+  name: string;
+  type: string;
+  value: string;
+}
 
-("https://website.com/");
 interface User {
   username: string;
   name: string;

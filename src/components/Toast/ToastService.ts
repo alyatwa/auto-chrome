@@ -2,8 +2,8 @@
 import { createContext, useContext } from "react";
 
 const ToastContext = createContext({
-  open: (component: React.ReactNode, timeout?: number) => {},
-  close: (id: number) => {},
+  open: (_component: React.ReactNode, _timeout?: number) => {},
+  close: (_id: number) => {},
 });
 
 export const useToast = () => useContext(ToastContext);

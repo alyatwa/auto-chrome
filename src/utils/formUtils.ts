@@ -1,4 +1,4 @@
-export const autoFillForm = (da?: any) => {
+export const autoFillForm = (_da?: any) => {
   // Iterate over the keys in the data object
   const data = [
     {

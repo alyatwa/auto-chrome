@@ -31,12 +31,12 @@ export const useApps = () => {
       handleClick: () => {},
     },
     {
-      name: "settings",
-      label: "Settings",
-      img: "/images/setting.png",
+      name: "review",
+      label: "Review Product",
+      img: "/images/review.png",
       disabled: false,
       isPaid: false,
-      handleClick: () => setPage("settings"),
+      handleClick: () => () => {},
     },
   ];
   return {

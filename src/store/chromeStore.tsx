@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Message, sendMessage } from "./sendMessage";
+import { sendMessage } from "./sendMessage";
 import { useToast } from "../components/Toast/ToastService";
 // @ts-ignore
 import useSound from "use-sound";
@@ -17,24 +17,24 @@ interface GlobalContext {
   loading: boolean;
   token: string | null;
   openAIToken: string | null;
-  getOpenAIToken: () => void;
   user: User | null;
   refreshUser: () => void;
   getUser: Function;
   setLoading: Function;
   summarizeNow: Function;
+  reviewNow: Function;
 }
 
 const globalContext = createContext<GlobalContext>({
   auth: false,
   page: "login",
-  setPage: (page: "login" | "settings" | "form" | "home") => {},
+  setPage: (_page: "login" | "settings" | "form" | "home") => {},
   loading: false,
   setLoading: () => {},
-  summarizeNow: (data: any) => {},
+  reviewNow: () => {},
+  summarizeNow: (_data: any) => {},
   token: null,
   openAIToken: null,
-  getOpenAIToken: () => {},
   user: null,
   refreshUser: () => {},
   getUser: () => {},
@@ -56,9 +56,16 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
   const toast = useToast();
   const [playOn] = useSound("./noti.mp3", { volume: 0.9 });
 
-  const handleMessageListener = (message: Message<number | string>) => {
+  const handleMessageListener = (message: any) => {
     setLoading(false);
     switch (message.type) {
+      case "review-now":
+        if (message.data.success) {
+          toast.open("Review completed successfully!", 1500);
+        } else {
+          toast.open(`Review failed!`, 1500);
+        }
+        break;
       case "summarize-now":
         if (message.data.success) {
           toast.open("Summarize completed successfully!", 2000);
@@ -144,18 +151,14 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
 
       handleMessageListener(data);
     },
-    summarizeNow: async (dataP: any) => {
+    reviewNow: async (dataP: any) => {
       setLoading(true);
       const data = await sendMessage(dataP);
       handleMessageListener(data);
     },
-    getOpenAIToken: async () => {
-      const data = await sendMessage({
-        type: "authOpenAI",
-        subtype: "get",
-        data: {},
-      });
-
+    summarizeNow: async (dataP: any) => {
+      setLoading(true);
+      const data = await sendMessage(dataP);
       handleMessageListener(data);
     },
   };

@@ -1,4 +1,4 @@
-export interface Message<T> {
+export interface Message {
   type: string;
   subtype: string;
   data: any;
@@ -9,7 +9,7 @@ export interface Response<V> {
   data: V;
 }
 
-export function sendMessage<T, V>(message: Message<T>) {
+export function sendMessage<V>(message: Message) {
   return new Promise<any>((resolve, reject) => {
     try {
       chrome.runtime.sendMessage(message, (response: Response<V>) => {
