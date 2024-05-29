@@ -156,9 +156,11 @@ function App() {
         <div className="flex bg-black/70 z-[1000] fixed w-full h-full border border-gray-200 shadow-lg justify-center items-center ">
           <div className="flex flex-col justify-between bg-white w-1/2 h-[440px] rounded-2xl">
             <Header close={() => setClose(true)} />
-            <div className="bg-gray-200 h-full p-2 overflow-y-auto">
-              {content}
-            </div>
+            <div
+              className="bg-gray-200 h-full p-2 overflow-y-auto"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+
             <Footer />
           </div>
         </div>
