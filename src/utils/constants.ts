@@ -1,6 +1,9 @@
 export const constants = {
-  base_url: "http://localhost:3000",
+  app_name: "Micro Ai Tools",
+  base_url: "https://autofill.recapmag.com",
+  profile_url: "https://autofill.recapmag.com",
+  support_url: "https://autofill.recapmag.com",
   login_url: "/login",
   register_url: "/register",
-  base_api_url: "http://localhost:8000/api/",
+  base_api_url: "https://autofill.recapmag.com/api/",
 };

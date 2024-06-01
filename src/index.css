@@ -7,7 +7,7 @@ html {
   height: 400px;
 }
 .app-icon::before {
-  @apply z-[10] content-["SOON"] relative top-5 left-4 text-[8px] bg-gray-700 rounded-2xl py-1 px-2;
+  /*@apply z-10 content-["SOON"] relative top-5 left-4 text-[8px] bg-gray-700 rounded-2xl py-1 px-2;*/
 }
 
 @property --rotate {

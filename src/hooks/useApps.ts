@@ -1,9 +1,11 @@
 import { useGlobalContext } from "../store/chromeStore";
+import useReview from "./useReview";
 import useSummarize from "./useSummarize";
 
 export const useApps = () => {
   const { setPage } = useGlobalContext();
   const { summarize } = useSummarize();
+  const { review } = useReview();
 
   const apps = [
     {
@@ -36,7 +38,7 @@ export const useApps = () => {
       img: "/images/review.png",
       disabled: false,
       isPaid: false,
-      handleClick: () => () => {},
+      handleClick: () => review(),
     },
   ];
   return {

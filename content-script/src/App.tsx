@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import "./App.css";
+import { constants } from "../../src/utils/constants";
 
 function App() {
   const [close, setClose] = useState(true);
   const [content, setContent] = useState("");
-  const base_api_url = "http://localhost:8000/api/autofill";
+  const base_api_url = `${constants.base_api_url}autofill`;
 
   chrome.runtime.onMessage.addListener(function (
     request,
@@ -18,6 +19,9 @@ function App() {
         start(request.token, request.url);
         break;
       case "summarize-now-cs":
+        injectResponse(request.data, sendResponse);
+        break;
+      case "review-now-cs":
         injectResponse(request.data, sendResponse);
         break;
       default:
@@ -171,8 +175,11 @@ function App() {
 const Header = ({ close }: { close: () => void }) => {
   return (
     <div className="w-full rounded-t-2xl px-6 py-2 flex justify-between items-center">
-      <p className="text-lg text-black">Micro</p>
-      <button onClick={() => close()} className="btn text-2xl text-black">
+      <p className="text-lg text-black">{constants.app_name}</p>
+      <button
+        onClick={() => close()}
+        className="btn text-2xl text-black close-btn"
+      >
         ×
       </button>
     </div>
@@ -182,10 +189,18 @@ const Header = ({ close }: { close: () => void }) => {
 const Footer = () => {
   return (
     <div className="w-full rounded-t-2xl px-6 py-4 flex justify-start items-center gap-2">
-      <a target="_blank" href="#" className="text-xs text-gray-600">
+      <a
+        target="_blank"
+        href={constants.profile_url}
+        className="text-xs text-gray-600"
+      >
         Profile
       </a>
-      <a target="_blank" href="#" className="text-xs text-gray-600">
+      <a
+        target="_blank"
+        href={constants.support_url}
+        className="text-xs text-gray-600"
+      >
         Support
       </a>
     </div>

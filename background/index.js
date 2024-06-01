@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-const HOST = "http://localhost";
-const HOST_url = "http://localhost:8000";
+const HOST = "https://autofill.recapmag.com";
+const HOST_url = "https://autofill.recapmag.com";
 const COOKIE_NAME = "chromeToken";
 const USER_DATA_NAME = "userData";
 
