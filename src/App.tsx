@@ -8,11 +8,13 @@ import Home from "./pages/Home";
 import Settings from "./pages/Settings";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import googleAnalytics from "./helpers/google-analytics";
 
 function App() {
   const { getUser, auth, page, loading } = useGlobalContext();
   useEffect(() => {
     getUser();
+    googleAnalytics.firePageViewEvent(page, "/");
   }, []);
   const Page = () => {
     switch (page) {

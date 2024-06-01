@@ -1,3 +1,11 @@
+interface Params {
+  [key: string]: string;
+  session_id?: string;
+  page_title?: string;
+  page_location?: string;
+  engagement_time_msec?: number;
+}
+
 interface Input {
   name: string;
   value: string;

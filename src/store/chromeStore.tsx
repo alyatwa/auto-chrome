@@ -9,6 +9,7 @@ import { sendMessage } from "./sendMessage";
 import { useToast } from "../components/Toast/ToastService";
 // @ts-ignore
 import useSound from "use-sound";
+import googleAnalytics from "../helpers/google-analytics";
 
 interface GlobalContext {
   auth: boolean;
@@ -58,6 +59,10 @@ export function GlobalContextProvider({ children }: GlobalContextProvider) {
 
   const handleMessageListener = (message: any) => {
     setLoading(false);
+    googleAnalytics.fireEvent(message.type, {
+      msg_status: "received",
+      msg: message.data,
+    });
     switch (message.type) {
       case "review-now":
         if (message.data.success) {
