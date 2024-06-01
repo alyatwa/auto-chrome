@@ -10,8 +10,8 @@ const Login: React.FC = () => {
         className="absolute h-[337px] w-[285px] bg-cover object-cover object-left rounded-t-xl"
       />
       <div className="absolute bottom-[53px] bg-gradient-to-t from-[#b4c541] to-transparent h-[48%] w-[284px] opacity-80 rounded-t-xl" />
-      <div className="text-4xl leading-10 absolute bottom-[66px] text-white font-semibold z-[20] w-[236px]">
-        Login to use AutoFill
+      <div className="text-3xl leading-10 absolute bottom-[66px] text-white font-semibold z-[20] w-[236px]">
+        Login to use {constants.app_name}
       </div>
 
       <a
