@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-const HOST = "https://autofill.recapmag.com";
-const HOST_url = "https://autofill.recapmag.com";
+const HOST = "https://microaitools.com";
+const HOST_url = "https://microaitools.com";
 const COOKIE_NAME = "chromeToken";
 const USER_DATA_NAME = "userData";
 
