@@ -6,14 +6,7 @@
   "action": {
     "default_popup": "index.html"
   },
-  "permissions": [
-    "scripting",
-    "tabs",
-    "activeTab",
-    "cookies",
-    "storage",
-    "nativeMessaging"
-  ],
+  "permissions": ["tabs", "activeTab", "cookies", "storage"],
 
   "icons": {
     "16": "images/logo16.png",
